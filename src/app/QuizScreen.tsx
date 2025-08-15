@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, SafeAreaView, Pressable } from 'react-native';
 import QuestionCard from '../components/QuestionCard';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import questions from '../questions';
+import Card from '../components/Card';
 
-const question = questions[0]
+const question = questions[100]
 
 const QuizScreen = () => {
     return (
@@ -16,10 +17,15 @@ const QuizScreen = () => {
                 </View>
 
                 {/* Body */}
-                <View>
+                {question ? (<View>
                     <QuestionCard question={question} />
                     <Text style={styles.time}>20 seconds</Text>
-                </View>
+                </View>) : (
+                    <Card title='Well done'>
+                        <Text>Correct answers: 3/5</Text>
+                        <Text>Best score: 10</Text>
+                    </Card>
+                )}
 
                 {/* Footer */}
                 <Pressable style={styles.button} onPress={() => console.warn('pressed')}>
