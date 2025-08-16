@@ -7,14 +7,14 @@ import CustomButton from '../components/CustomButton';
 import { useQuizContext } from '../providers/QuizProvider';
 
 const QuizScreen = () => {
-    const { question, questionIndex, onNext } = useQuizContext()
+    const { question, questionIndex, onNext, score, totalQuestions } = useQuizContext()
 
     return (
         <SafeAreaView style={styles.page}>
             <View style={styles.container}>
                 {/* Header */}
                 <View>
-                    <Text style={styles.title}>Question {questionIndex + 1}/5</Text>
+                    <Text style={styles.title}>Question {questionIndex + 1}/{totalQuestions}</Text>
                 </View>
 
                 {/* Body */}
@@ -23,7 +23,7 @@ const QuizScreen = () => {
                     <Text style={styles.time}>20 seconds</Text>
                 </View>) : (
                     <Card title='Well done'>
-                        <Text>Correct answers: 3/5</Text>
+                        <Text>Correct answers: {score}/{totalQuestions}</Text>
                         <Text>Best score: 10</Text>
                     </Card>
                 )}
