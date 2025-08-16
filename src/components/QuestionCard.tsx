@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AnswerOption from './AnswerOption';
 import { Question } from '../types';
@@ -9,10 +9,10 @@ type QuestionCardProps = {
 }
 
 const QuestionCard = ({ question }: QuestionCardProps) => {
-    const selectedOption = question.options[0]
+    const [selectedOption, setSelectedOption] = useState<string | undefined>()
 
     const onOptionSelected = (option: string) => {
-        console.warn(option)
+        setSelectedOption(option)
     }
 
     return (
@@ -23,7 +23,7 @@ const QuestionCard = ({ question }: QuestionCardProps) => {
                         key={option}
                         option={option}
                         isSelected={option === selectedOption}
-                        onPress={() => onOptionSelected(option)}
+                        onPress={() => setSelectedOption(option)}
                     />
                 ))}
             </View>
