@@ -1,6 +1,7 @@
 import { PropsWithChildren, createContext, useState, useContext, useEffect } from "react";
 import questions from "../questions";
 import { Question } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type QuizContext = {
     question?: Question,
@@ -31,7 +32,14 @@ export default function QuizProvider({ children }: PropsWithChildren) {
     const isFinished = questionIndex >= questions.length
 
     useEffect(() => {
-        if (isFinished && score > bestScore) setBestScore(score)
+        loadBestScore()
+    }, [])
+
+    useEffect(() => {
+        if (isFinished && score > bestScore) {
+            setBestScore(score)
+            saveBestScore(score)
+        }
     }, [isFinished])
 
     const restart = () => {
@@ -51,6 +59,25 @@ export default function QuizProvider({ children }: PropsWithChildren) {
         }
 
         setQuestionIndex(curVal => curVal + 1)
+    }
+
+    const saveBestScore = async (value: number) => {
+        try {
+            await AsyncStorage.setItem('best-score', String(value))
+        } catch (error) {
+
+        }
+    }
+
+    const loadBestScore = async () => {
+        try {
+            const value = await AsyncStorage.getItem('best-score')
+            if (value !== null) {
+                setBestScore(Number(value))
+            }
+        } catch (error) {
+
+        }
     }
 
     return (
