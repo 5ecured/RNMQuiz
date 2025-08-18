@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Pressable } from 'react-native';
 import QuestionCard from '../components/QuestionCard';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Card from '../components/Card';
 import CustomButton from '../components/CustomButton';
 import { useQuizContext } from '../providers/QuizProvider';
+import { useTimer } from '../hooks/useTimer';
 
 const QuizScreen = () => {
     const { question, questionIndex, onNext, score, totalQuestions, bestScore } = useQuizContext()
-    const [time, setTime] = useState(20)
+    const { time, startTimer, clearTimer } = useTimer(20)
 
     useEffect(() => {
-        setTime(20)
+        startTimer()
 
-        // setInterval is an example where we create something that must be cleaned afterwards
-        // therefore we put it in a variable, then use clearInterval
-        const interval = setInterval(() => {
-            setTime(t => t - 1)
-        }, 1000)
-
-        // This is the cleanup function
         return () => {
-            clearInterval(interval)
+            clearTimer()
         }
     }, [question])
 
@@ -42,7 +36,7 @@ const QuizScreen = () => {
                 {/* Body */}
                 {question ? (<View>
                     <QuestionCard question={question} />
-                    <Text style={styles.time}>{time} seconds</Text>
+                    <Text style={styles.time} onPress={clearTimer}>{time} seconds</Text>
                 </View>) : (
                     <Card title='Well done'>
                         <Text>Correct answers: {score}/{totalQuestions}</Text>
